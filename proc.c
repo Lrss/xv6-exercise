@@ -246,6 +246,9 @@ exit(void)
   iput(curproc->cwd);
   end_op();
   curproc->cwd = 0;
+  cprintf("Process: %s(%d), was scheduled: %d times\n", curproc->name, curproc->pid, curproc->scounter);
+
+  curproc->scounter=0;
 
   acquire(&ptable.lock);
 
@@ -342,6 +345,9 @@ scheduler(void)
       c->proc = p;
       switchuvm(p);
       p->state = RUNNING;
+
+      p->scounter++;
+      //cprintf("Process: %s(%d) schedule-count: %d\n", p->name, p->pid, p->scounter);
 
       swtch(&(c->scheduler), p->context);
       switchkvm();
