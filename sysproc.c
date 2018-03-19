@@ -89,3 +89,12 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
+
+int
+sys_halt(void)
+{
+  // ACPI Shutdown sequence supported by Bochs and QEMU
+  // http://forum.osdev.org/viewtopic.php?t=16990
+  outw( 0x604, 0x0 | 0x2000 );
+  return 1;
+}
